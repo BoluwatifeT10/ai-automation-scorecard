@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Lead Qualification Starter Kit — Agency Edition</title>
+  <style>
+    :root {
+      --ink: #0b1020;
+      --muted: #3a4256;
+      --faint: #5c6578;
+      --line: #d5dbe8;
+      --line-strong: #b7c0d4;
+      --blue: #1847f0;
+      --blue-soft: #eef2ff;
+      --paper: #ffffff;
+      --wash: #f4f6fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: var(--ink);
+      font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+      font-size: 9pt;
+      line-height: 1.32;
+      font-weight: 400;
+    }
+
+    @page { size: A4; margin: 0; }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      padding: 10mm 12mm 8mm;
+      background: #fff;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+      display: flex;
+      flex-direction: column;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page:last-child { page-break-after: auto; break-after: auto; }
+
+    .run, .runfoot {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6mm;
+      font-size: 7.2pt;
+      font-weight: 650;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .run {
+      padding-bottom: 2mm;
+      border-bottom: 1.6pt solid var(--ink);
+    }
+    .run b, .runfoot b { color: var(--blue); font-weight: 700; letter-spacing: 0.12em; }
+    .runfoot {
+      margin-top: auto;
+      border-top: 0.4pt solid var(--line);
+      padding-top: 1.8mm;
+    }
+
+    .content { padding-top: 4.2mm; }
+
+    h1, h2, h3, h4, p { margin: 0; }
+    h2 {
+      font-size: 16.5pt;
+      line-height: 1.05;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+    h3 {
+      font-size: 9.5pt;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .lede { margin-top: 2mm; color: var(--muted); max-width: 178mm; }
+    .note {
+      margin-top: 2.2mm;
+      padding: 2mm 2.6mm;
+      background: var(--blue-soft);
+      color: var(--ink);
+    }
+    .note strong { color: var(--blue); font-weight: 700; }
+
+    .screen-note {
+      max-width: 210mm;
+      margin: 0 auto 12px;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .screen-note b { color: #9db4ff; }
+    @media print { .screen-note { display: none; } }
+    @media screen {
+      body { background: #d9deea; padding: 18px 0 36px; }
+      .page {
+        margin: 0 auto 16px;
+        box-shadow: 0 14px 36px rgba(11, 16, 32, 0.16);
+      }
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: none;
+      border-bottom: 0.6pt solid var(--line-strong);
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 9pt;
+      line-height: 1.25;
+      padding: 0 0 0.2mm;
+      border-radius: 0;
+      resize: none;
+    }
+    textarea { min-height: 8mm; }
+    input[type="checkbox"] {
+      width: 3.2mm;
+      height: 3.2mm;
+      margin: 0;
+      accent-color: var(--blue);
+      vertical-align: middle;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4mm 6mm; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.2mm 4mm; }
+    label.f {
+      display: block;
+      margin-top: 2mm;
+      font-size: 7.2pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    label.f span { color: var(--faint); font-weight: 600; letter-spacing: 0.04em; text-transform: none; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left;
+      font-size: 7pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      font-weight: 700;
+      padding: 1mm 1.4mm 1mm 0;
+      border-bottom: 0.8pt solid var(--ink);
+      vertical-align: bottom;
+    }
+    td {
+      padding: 1.15mm 1.4mm 1.05mm 0;
+      border-bottom: 0.35pt solid var(--line);
+      vertical-align: top;
+    }
+    td input[type="text"] { font-size: 8.5pt; }
+
+    ol.rules, ul.clean { margin: 1.4mm 0 0; padding: 0 0 0 4.2mm; }
+    ol.rules li, ul.clean li { margin: 0.7mm 0; padding-left: 0.6mm; }
+    ol.rules li::marker { color: var(--blue); font-weight: 700; }
+
+    .kicker {
+      font-size: 7.4pt;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    /* Cover */
+    .cover { padding: 16mm 16mm 14mm; }
+    .cover .brand {
+      font-size: 8pt;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    .cover h1 {
+      margin-top: 18mm;
+      font-size: 34pt;
+      line-height: 0.96;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+      max-width: 160mm;
+    }
+    .cover .rule {
+      width: 28mm;
+      height: 2.4pt;
+      background: var(--blue);
+      margin: 7mm 0 5mm;
+    }
+    .cover .sub {
+      font-size: 12.5pt;
+      line-height: 1.35;
+      max-width: 158mm;
+      color: var(--ink);
+    }
+    .cover .who {
+      margin-top: 4mm;
+      color: var(--muted);
+      font-size: 10.5pt;
+    }
+    .cover .meta {
+      margin-top: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm 10mm;
+      padding-top: 8mm;
+      border-top: 1.6pt solid var(--ink);
+    }
+    .cover .edition {
+      margin-top: 8mm;
+      font-size: 8pt;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--faint);
+    }
+
+    .split { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 5mm; margin-top: 3mm; }
+    .card {
+      border: 0.5pt solid var(--line-strong);
+      padding: 2.4mm 2.8mm 2.6mm;
+    }
+    .card h3 { margin-bottom: 1mm; }
+    .card p + p { margin-top: 1mm; }
+    .num {
+      display: inline-block;
+      min-width: 4.5mm;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .factor { margin-top: 2.3mm; }
+    .factor h3 { font-size: 10pt; }
+    .factor .src { color: var(--faint); font-size: 8pt; margin: 0.3mm 0 1mm; }
+    .scores { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.6mm; }
+    .scores p {
+      margin: 0;
+      background: var(--wash);
+      padding: 1.5mm 1.7mm 1.7mm;
+      min-height: 18mm;
+    }
+    .scores b {
+      display: block;
+      color: var(--blue);
+      font-size: 11pt;
+      line-height: 1;
+      margin-bottom: 0.8mm;
+    }
+
+    .cats { display: grid; grid-template-columns: 1fr 1fr; gap: 2.2mm; margin-top: 2.4mm; }
+    .cat { border-top: 2pt solid var(--blue); padding-top: 1.5mm; }
+    .cat h3 { font-size: 11pt; letter-spacing: -0.01em; }
+    .cat .when { margin-top: 0.8mm; }
+    .cat .send { margin-top: 0.8mm; color: var(--muted); }
+
+    .prompt {
+      margin-top: 2mm;
+      border: 0.6pt solid var(--ink);
+      padding: 2.2mm 2.8mm 2.4mm;
+      font-size: 7.55pt;
+      line-height: 1.28;
+    }
+    .prompt h3 {
+      font-size: 8pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin: 1.5mm 0 0.4mm;
+    }
+    .prompt h3:first-child { margin-top: 0; }
+    .prompt p { margin: 0.3mm 0; }
+    .prompt ol, .prompt ul { margin: 0.4mm 0 0.6mm; padding-left: 3.6mm; }
+    .prompt li { margin: 0.15mm 0; }
+    .mark {
+      font-size: 7.2pt;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--blue);
+      display: inline-block;
+      padding: 0.4mm 1.6mm;
+      margin-bottom: 1mm;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr 62mm;
+      gap: 4mm;
+      margin-top: 3mm;
+    }
+    .steps { list-style: none; margin: 0; padding: 0 0 0 4mm; border-left: 1.4pt solid var(--blue); }
+    .steps li { position: relative; padding: 0 0 2.3mm 3.2mm; }
+    .steps li::before {
+      content: "";
+      position: absolute;
+      left: -4.85mm;
+      top: 1.1mm;
+      width: 2.3mm;
+      height: 2.3mm;
+      background: var(--blue);
+    }
+    .steps b { display: block; font-size: 9.5pt; }
+    .steps span { color: var(--muted); }
+    .branch {
+      border: 0.6pt solid var(--blue);
+      background: var(--blue-soft);
+      padding: 2mm 2.4mm;
+      margin-bottom: 2mm;
+    }
+    .branch b { display: block; color: var(--blue); font-size: 8pt; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.6mm; }
+
+    .msgs { margin-top: 2mm; }
+    .msg { margin-top: 2.2mm; padding-top: 1.4mm; border-top: 0.6pt solid var(--ink); }
+    .msg h3 { font-size: 10.5pt; }
+    .msg .subline { color: var(--blue); font-size: 8pt; font-weight: 700; margin: 0.6mm 0; }
+    .msg p { margin-top: 0.5mm; }
+
+    .ex { margin-top: 2mm; }
+    .ex h3 { margin-bottom: 0.6mm; }
+    .turn { display: grid; grid-template-columns: 16mm 1fr; gap: 1.5mm; margin: 0.35mm 0; }
+    .turn b { color: var(--blue); font-size: 7.4pt; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 0.3mm; }
+    .record {
+      margin-top: 1.2mm;
+      background: var(--wash);
+      padding: 1.4mm 1.8mm;
+      font-size: 7.6pt;
+      line-height: 1.3;
+    }
+
+    .tiny { font-size: 8pt; color: var(--muted); }
+    .mt { margin-top: 2.2mm; }
+    .tight td { padding-top: 0.85mm; padding-bottom: 0.75mm; }
+    .write td { padding-top: 2mm; padding-bottom: 1.8mm; }
+    .checks { list-style: none; margin: 1.2mm 0 0; padding: 0; }
+    .checks li {
+      display: grid;
+      grid-template-columns: 4mm 1fr 32mm;
+      gap: 1.6mm;
+      align-items: start;
+      padding: 0.7mm 0;
+      border-bottom: 0.3pt solid var(--line);
+    }
+    .sign { display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr; gap: 4mm; margin-top: 2mm; }
+  </style>
+</head>
+<body>
+
+  <p class="screen-note">Print on <b>A4</b>, margins <b>None</b>, background graphics <b>on</b>. This bar does not print. Complete the worksheets in order, then paste the prompt from pages 9–10 into the agent.</p>
+
+  <!-- 1 COVER -->
+  <section class="page cover">
+    <p class="brand">Agency edition · First edition</p>
+    <h1>AI Lead Qualification<br>Starter Kit</h1>
+    <div class="rule"></div>
+    <p class="sub">A working system for qualifying prospective clients before a person spends time on the lead.</p>
+    <p class="who">For digital agencies. One offer, one inbound path, one CRM, one named reviewer.</p>
+    <p class="edition">Complete the worksheets. Configure the rules. Adapt the prompt. Test six leads. Then go live.</p>
+    <div class="meta">
+      <div>
+        <label class="f">Agency</label>
+        <input type="text" name="agency">
+      </div>
+      <div>
+        <label class="f">Offer this kit qualifies</label>
+        <input type="text" name="offer-cover">
+      </div>
+      <div>
+        <label class="f">Prepared by</label>
+        <input type="text" name="prepared-by">
+      </div>
+      <div>
+        <label class="f">Date</label>
+        <input type="text" name="date">
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 HOW TO USE -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>How to use</span></header>
+    <div class="content">
+      <p class="kicker">Page 02</p>
+      <h2>How to use this kit</h2>
+      <p class="lede">This edition is written for a digital agency qualifying prospective clients. The blanks can be reused for a second offer later. Finish the pages in order. A later page does not repair an unclear definition of a qualified lead.</p>
+
+      <div class="split">
+        <div>
+          <h3>What you will have when you finish</h3>
+          <ul class="clean">
+            <li>One sentence that states what “qualified” means for this offer.</li>
+            <li>Must-have signals, secondary signals, and automatic disqualifiers.</li>
+            <li>Ten questions in your words, each marked required or optional.</li>
+            <li>A minimum fee, a floor, a decision window, and three score cutoffs.</li>
+            <li>A prompt you can paste into the agent, with brackets filled in.</li>
+            <li>The CRM fields the workflow must write.</li>
+            <li>Four messages that send only when consent and channel allow it.</li>
+            <li>Six test results and a go-live decision.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Work in this order</h3>
+          <p><span class="num">04</span> Lock the definition, the numbers, and the disqualifiers.</p>
+          <p><span class="num">06</span> Rewrite the ten questions.</p>
+          <p><span class="num">08</span> Confirm the category rules and cutoffs.</p>
+          <p><span class="num">09</span> Paste the prompt and replace every bracket.</p>
+          <p><span class="num">11</span> Build the workflow to match the diagram.</p>
+          <p><span class="num">12</span> Create the CRM fields, including consent.</p>
+          <p><span class="num">13</span> Load the four messages.</p>
+          <p><span class="num">14</span> Run the six tests before any live traffic.</p>
+        </div>
+      </div>
+
+      <div class="note mt">
+        <strong>Scope of this edition.</strong> Use it on new business inquiries: a form, a chat, or an email to the agency. One offer. One CRM. One reviewer, plus a backup named on page 4. A person still owns Priority replies, every escalation, and any lead the CRM did not store.
+      </div>
+
+      <h3 class="mt">Rules that keep the system honest</h3>
+      <ol class="rules">
+        <li>Set the minimum, the floor, and the decision window before any live lead is scored.</li>
+        <li>Score only words the prospect used. If a 0, 1, or 2 definition does not match, leave that factor blank and escalate.</li>
+        <li>Apply the category rules in the printed order. Stop at the first match.</li>
+        <li>Send nothing when inquiry consent is No. Send a nurture message only when later-contact consent is Yes.</li>
+        <li>Use only a channel the prospect chose. Do not move email consent over to phone or SMS.</li>
+      </ol>
+
+      <p class="lede">Pages 7 and 8 are the scoring logic. Pages 9 and 10 are the prompt. Keep them identical. If you change a cutoff on page 8, change the same number in the prompt before you go live.</p>
+      <table class="mt">
+        <thead>
+          <tr><th style="width:32mm">Output</th><th>When it is allowed</th><th>What goes out</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Priority</td><td>Rule 5 only.</td><td>One Priority message, on an allowed channel. The reviewer replies inside the window on page 4.</td></tr>
+          <tr><td>Qualified</td><td>Rule 6 only.</td><td>One Qualified message. A person takes the next conversation.</td></tr>
+          <tr><td>Nurture</td><td>Rule 8 only.</td><td>One Nurture message, and only if later-contact consent is Yes.</td></tr>
+          <tr><td>Disqualify</td><td>Rules 1, 2, or 4.</td><td>Rule 1 sends nothing. Rules 2 and 4 send one Not a fit message if inquiry consent is Yes.</td></tr>
+          <tr><td>Escalate</td><td>Rules 3, 7, or 9, or a failed CRM write.</td><td>Nothing to the prospect. Alert the reviewer with the record.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>02 / 14</b></footer>
+  </section>
+
+  <!-- 3 FRAMEWORK -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Framework</span></header>
+    <div class="content">
+      <p class="kicker">Page 03</p>
+      <h2>Lead qualification framework</h2>
+      <p class="lede">The workflow makes four decisions. Each decision is scored from a stated answer, then the category rules on page 8 choose the next action.</p>
+
+      <div class="grid-2 mt">
+        <article class="card">
+          <h3>Fit</h3>
+          <p>The prospect is a client this offer can serve. Compare what they said with the must-have and secondary signals on page 4.</p>
+        </article>
+        <article class="card">
+          <h3>Intent</h3>
+          <p>They named a business problem and, for a top score, asked for a concrete next step. Curiosity without a problem is not intent.</p>
+        </article>
+        <article class="card">
+          <h3>Timing</h3>
+          <p>They gave a decision date or a start date. Compare that date with the decision window on page 4.</p>
+        </article>
+        <article class="card">
+          <h3>Authority</h3>
+          <p>You know whether this person can approve the fee, or who can, and whether that person is already involved.</p>
+        </article>
+        <article class="card">
+          <h3>Value</h3>
+          <p>They stated a number or a range. Compare it with the minimum and the floor. Do not convert currency. Do not guess a budget.</p>
+        </article>
+        <article class="card">
+          <h3>Next action</h3>
+          <p>Priority, Qualified, Nurture, Disqualify, or Escalate. Escalate is a hold for a person. It is not a fifth sales status.</p>
+        </article>
+      </div>
+
+      <h3 class="mt">Stages</h3>
+      <table class="mt">
+        <thead>
+          <tr><th style="width:28mm">Stage</th><th>What is true</th><th style="width:48mm">Who acts</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Received</td><td>The inquiry is stored with source, time, and the consent text they saw.</td><td>Workflow</td></tr>
+          <tr><td>In conversation</td><td>The agent asks only required questions that are still blank, one at a time.</td><td>Agent</td></tr>
+          <tr><td>Scored</td><td>Each factor is 0, 1, 2, or deliberately blank.</td><td>Agent</td></tr>
+          <tr><td>Routed</td><td>The first matching category rule has fired and the CRM write succeeded.</td><td>Workflow</td></tr>
+          <tr><td>Held</td><td>The lead is Escalate, or the CRM write failed. No sales message has been sent.</td><td>Reviewer</td></tr>
+          <tr><td>Closed</td><td>The matching message was sent, or the rule was “send nothing,” and the record shows which.</td><td>Workflow</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note mt">
+        <strong>One definition, shared.</strong> The qualified-means sentence on page 4 is the sentence sales and marketing both use. The agent does not invent a softer one. The agent also does not quote a fee, promise a result, book a contract, or take payment. A person does that after Priority or Qualified.
+      </div>
+
+      <h3 class="mt">What the agent is for</h3>
+      <p class="lede">The agent collects missing answers, scores them with the printed definitions, and returns a structured record. The workflow around the agent checks consent, writes the CRM, sends at most one template, and alerts the reviewer when the record says Escalate or the write fails.</p>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>03 / 14</b></footer>
+  </section>
+
+  <!-- 4 WORKSHEET -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Framework worksheet</span></header>
+    <div class="content">
+      <p class="kicker">Page 04</p>
+      <h2>Framework worksheet</h2>
+      <p class="lede">These values are the only numbers and lists the agent is allowed to use. Write them before you score a live lead.</p>
+
+      <div class="grid-3">
+        <div>
+          <label class="f">Decision window (days)</label>
+          <input type="text" name="window" value="90">
+        </div>
+        <div>
+          <label class="f">Minimum project value</label>
+          <input type="text" name="minimum" placeholder="e.g. 8000 USD / month">
+        </div>
+        <div>
+          <label class="f">Value floor</label>
+          <input type="text" name="floor" placeholder="e.g. 3000 USD / month">
+        </div>
+      </div>
+      <p class="tiny mt">Window starts the day the inquiry arrives. A date on or before the last day of the window can score Timing 2. The floor must be lower than the minimum. Currency is whatever you write here. The agent must not convert it.</p>
+
+      <label class="f">Must-have signals <span>— all must match for Fit 2</span></label>
+      <div class="grid-3">
+        <div>
+          <label class="f">Service</label>
+          <input type="text" name="mh-service" placeholder="e.g. paid media retainers">
+        </div>
+        <div>
+          <label class="f">Company type</label>
+          <input type="text" name="mh-company" placeholder="e.g. funded or established brands">
+        </div>
+        <div>
+          <label class="f">Market</label>
+          <input type="text" name="mh-market" placeholder="e.g. US and Canada">
+        </div>
+      </div>
+
+      <label class="f">Secondary signals <span>— exactly one miss can still be Fit 1. Leave blank if you do not use Fit 1.</span></label>
+      <div class="grid-2">
+        <input type="text" name="sec-1" placeholder="e.g. Shopify or a comparable store">
+        <input type="text" name="sec-2" placeholder="e.g. a named marketing lead on staff">
+      </div>
+
+      <label class="f">Automatic disqualifiers <span>— any one forces Fit 0 and category Disqualify</span></label>
+      <p class="tiny">Write your own lines. Common ones: outside the markets above, unpaid speculative strategy or creative, student or job research, a vendor selling to the agency.</p>
+      <input type="text" name="dq-1">
+      <input type="text" name="dq-2">
+      <input type="text" name="dq-3">
+      <input type="text" name="dq-4">
+
+      <label class="f">Qualified means <span>— one sentence sales and marketing both use</span></label>
+      <textarea name="qualified-means" rows="2"></textarea>
+
+      <div class="grid-3">
+        <div>
+          <label class="f">Reviewer</label>
+          <input type="text" name="reviewer">
+        </div>
+        <div>
+          <label class="f">Backup reviewer</label>
+          <input type="text" name="backup">
+        </div>
+        <div>
+          <label class="f">Priority reply window</label>
+          <input type="text" name="reply-window" value="Same business day">
+        </div>
+      </div>
+      <p class="tiny mt">A usable qualified-means sentence names the offer, the must-haves, the minimum, and the window. Example shape: “A qualified lead wants [OFFER], matches our service, company type, and market, has stated a fee at or above [MINIMUM], and can decide inside [WINDOW] days.”</p>
+      <table class="tight mt">
+        <thead>
+          <tr><th>Bracket in the prompt</th><th>Copy from</th><th>Bracket in the prompt</th><th>Copy from</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>[AGENCY_NAME]</td><td>Cover</td><td>[MUST_HAVES]</td><td>Service, company type, market</td></tr>
+          <tr><td>[OFFER]</td><td>Cover</td><td>[SECONDARY]</td><td>Secondary signals, or “none”</td></tr>
+          <tr><td>[DECISION_WINDOW_DAYS]</td><td>Decision window</td><td>[DISQUALIFIERS]</td><td>The lines above</td></tr>
+          <tr><td>[MINIMUM_VALUE]</td><td>Minimum</td><td>[PRIORITY_MIN] [QUALIFIED_MIN] [REVIEW_SCORE]</td><td>Page 8</td></tr>
+          <tr><td>[VALUE_FLOOR]</td><td>Floor</td><td>[REVIEWER_NAME] [TONE]</td><td>This page, and page 6</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>04 / 14</b></footer>
+  </section>
+
+  <!-- 5 QUESTIONS -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Qualification questions</span></header>
+    <div class="content">
+      <p class="kicker">Page 05</p>
+      <h2>Ten qualification questions</h2>
+      <p class="lede">Use these wordings, or rewrite them on page 6. Do not add an eleventh question to the default agent. Seven are required by default because a score depends on them. Three are optional context.</p>
+      <table class="tight mt">
+        <thead>
+          <tr>
+            <th style="width:8mm">#</th>
+            <th>Question, what it proves, and the pass signal</th>
+            <th style="width:22mm">Default</th>
+            <th style="width:18mm">Feeds</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><b>What outcome do you want an agency to deliver?</b> Proves there is a job to do. Pass: a concrete outcome, such as pipeline, launches, or a channel to be run.</td>
+            <td>Required</td><td>Fit, Intent</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><b>What is in place today?</b> Gives the reviewer the current setup. It does not change the total by itself.</td>
+            <td>Optional</td><td>Context</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><b>What changed that made you look for an agency now?</b> Separates an active problem from browsing.</td>
+            <td>Required</td><td>Intent</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><b>Which brand, product, or business is this for?</b> Checks company type and market against page 4.</td>
+            <td>Required</td><td>Fit</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><b>What have you already tried, including other agencies?</b> Flags a request for unpaid speculative work. If they never describe that request, do not assume it.</td>
+            <td>Optional</td><td>Intent</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><b>When do you need a decision or a start?</b> Pass for Timing 2: a date on or before the last day of the decision window.</td>
+            <td>Required</td><td>Timing</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><b>What budget or fee range is approved or under discussion?</b> Pass: a number or a range in the currency written on page 4. “Flexible” is not a number.</td>
+            <td>Required</td><td>Value</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><b>Who can approve the engagement?</b> Pass for Authority 2: the speaker is that person, or that person is already on the thread or booked.</td>
+            <td>Required</td><td>Authority</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><b>What constraints apply to platform, market, or contract type?</b> Checks the remaining must-have and secondary signals.</td>
+            <td>Required</td><td>Fit</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><b>What would make the first 90 days a success?</b> Gives the reviewer a line to repeat in the reply. It does not change the total.</td>
+            <td>Optional</td><td>Context</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3 class="mt">Answers that are too vague to score</h3>
+      <p class="lede">Ask that question once more, in different words. If the second answer is still on this list, leave the factor blank and escalate. Do not translate a vague answer into a 1.</p>
+      <div class="grid-3 mt">
+        <p><b>Not an outcome.</b> “Grow,” “help us,” or “ideas.”</p>
+        <p><b>Not a change.</b> “Just looking,” with no event in the business.</p>
+        <p><b>Not a business.</b> A first name, and no brand or market.</p>
+        <p><b>Not a date.</b> “Soon,” “ASAP,” or “sometime.”</p>
+        <p><b>Not a fee.</b> “Flexible,” “depends,” or “market rate.”</p>
+        <p><b>Not a person.</b> “The team,” “we,” or “management,” with no name.</p>
+      </div>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>05 / 14</b></footer>
+  </section>
+
+  <!-- 6 QUESTION WORKSHEET -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Question worksheet</span></header>
+    <div class="content">
+      <p class="kicker">Page 06</p>
+      <h2>Question worksheet</h2>
+      <p class="lede">Write the wording the agent should use. Mark who asks it. If you leave a wording blank, the agent uses the default on page 5. Required questions are asked until answered or until two asks have failed.</p>
+      <table class="tight write mt">
+        <thead>
+          <tr>
+            <th style="width:8mm">#</th>
+            <th>Your wording</th>
+            <th style="width:28mm">Asked by</th>
+            <th style="width:16mm">Required</th>
+            <th style="width:24mm">Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><input type="text" name="q1"></td><td><input type="text" name="q1a" placeholder="Form / agent / person"></td><td><input type="checkbox" name="q1r" checked></td><td><input type="text" name="q1f" value="Fit, Intent"></td></tr>
+          <tr><td>2</td><td><input type="text" name="q2"></td><td><input type="text" name="q2a"></td><td><input type="checkbox" name="q2r"></td><td><input type="text" name="q2f" value="Context"></td></tr>
+          <tr><td>3</td><td><input type="text" name="q3"></td><td><input type="text" name="q3a"></td><td><input type="checkbox" name="q3r" checked></td><td><input type="text" name="q3f" value="Intent"></td></tr>
+          <tr><td>4</td><td><input type="text" name="q4"></td><td><input type="text" name="q4a"></td><td><input type="checkbox" name="q4r" checked></td><td><input type="text" name="q4f" value="Fit"></td></tr>
+          <tr><td>5</td><td><input type="text" name="q5"></td><td><input type="text" name="q5a"></td><td><input type="checkbox" name="q5r"></td><td><input type="text" name="q5f" value="Intent"></td></tr>
+          <tr><td>6</td><td><input type="text" name="q6"></td><td><input type="text" name="q6a"></td><td><input type="checkbox" name="q6r" checked></td><td><input type="text" name="q6f" value="Timing"></td></tr>
+          <tr><td>7</td><td><input type="text" name="q7"></td><td><input type="text" name="q7a"></td><td><input type="checkbox" name="q7r" checked></td><td><input type="text" name="q7f" value="Value"></td></tr>
+          <tr><td>8</td><td><input type="text" name="q8"></td><td><input type="text" name="q8a"></td><td><input type="checkbox" name="q8r" checked></td><td><input type="text" name="q8f" value="Authority"></td></tr>
+          <tr><td>9</td><td><input type="text" name="q9"></td><td><input type="text" name="q9a"></td><td><input type="checkbox" name="q9r" checked></td><td><input type="text" name="q9f" value="Fit"></td></tr>
+          <tr><td>10</td><td><input type="text" name="q10"></td><td><input type="text" name="q10a"></td><td><input type="checkbox" name="q10r"></td><td><input type="text" name="q10f" value="Context"></td></tr>
+        </tbody>
+      </table>
+      <div class="note mt">
+        <strong>Asked by.</strong> Form, for anything the form already collects. Agent, for gaps. Person, only for a question you refuse to let the agent ask. A question marked Person is still required for scoring if its factor cannot be scored without it, and the agent must escalate instead of guessing.
+      </div>
+      <label class="f">Notes for tone</label>
+      <input type="text" name="tone" placeholder="e.g. plain, specific, no slang, no urgency">
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>06 / 14</b></footer>
+  </section>
+
+  <!-- 7 SCORING -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Scoring definitions</span></header>
+    <div class="content">
+      <p class="kicker">Page 07</p>
+      <h2>What 0, 1, and 2 mean</h2>
+      <p class="lede">Use the definition that matches the prospect’s words. Do not pick the nearer score. If none match, leave the factor blank and escalate. Total = Fit + Intent + Timing + Authority + Value. Maximum 10. A blank factor means there is no total.</p>
+
+      <article class="factor">
+        <h3>Fit</h3>
+        <p class="src">From questions 1, 4, and 9, compared with page 4. If the secondary list is blank, Fit is only 2 or 0.</p>
+        <div class="scores">
+          <p><b>2</b> Every must-have signal matches. No automatic disqualifier is present.</p>
+          <p><b>1</b> Every must-have matches except exactly one signal, and that signal is on the secondary list. No disqualifier.</p>
+          <p><b>0</b> Any must-have fails, or any automatic disqualifier is present.</p>
+        </div>
+      </article>
+
+      <article class="factor">
+        <h3>Intent</h3>
+        <p class="src">From questions 1, 3, and 5. A discovery call they asked for is a next step. An unpaid pitch, unpaid creative, or a guarantee of results is speculative work.</p>
+        <div class="scores">
+          <p><b>2</b> They named the business problem and asked for a call, proposal, audit, or pricing.</p>
+          <p><b>1</b> They named the business problem and did not ask for a next step.</p>
+          <p><b>0</b> They did not name a business problem, or they asked only for unpaid speculative work.</p>
+        </div>
+      </article>
+
+      <article class="factor">
+        <h3>Timing</h3>
+        <p class="src">From question 6, compared with the decision window on page 4. “Next quarter” is a time reference. “Sometime” is not.</p>
+        <div class="scores">
+          <p><b>2</b> They stated a decision date or start date on or before the last day of the window.</p>
+          <p><b>1</b> They stated a month, quarter, or date that falls after the window.</p>
+          <p><b>0</b> They gave no time reference, or they said they are not deciding and not starting.</p>
+        </div>
+      </article>
+
+      <article class="factor">
+        <h3>Authority</h3>
+        <p class="src">From question 8. “I will recommend someone” is a 1 only if they name that person.</p>
+        <div class="scores">
+          <p><b>2</b> The speaker is the budget holder, or the budget holder is copied or already booked.</p>
+          <p><b>1</b> They name the budget holder and their own role in the recommendation. That person is not involved yet.</p>
+          <p><b>0</b> They cannot name the budget holder, or they have no role in the decision.</p>
+        </div>
+      </article>
+
+      <article class="factor">
+        <h3>Value</h3>
+        <p class="src">From question 7, compared with the minimum and the floor. No number means 0. Do not treat “flexible” as a range.</p>
+        <div class="scores">
+          <p><b>2</b> A number or range is stated, and its low end is greater than or equal to the minimum.</p>
+          <p><b>1</b> A number or range is stated, the low end is below the minimum, and the high end is at or above the floor.</p>
+          <p><b>0</b> No number or range is stated, or the high end is below the floor.</p>
+        </div>
+      </article>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>07 / 14</b></footer>
+  </section>
+
+  <!-- 8 CATEGORIES -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Categories</span></header>
+    <div class="content">
+      <p class="kicker">Page 08</p>
+      <h2>Priority, Qualified, Nurture, Disqualify</h2>
+      <p class="lede">Walk the rules from 1 to 9. Stop at the first match. Escalate means a person decides. It is not a category you email.</p>
+      <ol class="rules">
+        <li><b>Disqualify.</b> Inquiry consent is No.</li>
+        <li><b>Disqualify.</b> Any automatic disqualifier is present, or Fit is 0.</li>
+        <li><b>Escalate.</b> Any required question is unanswered after two asks, or any factor is blank.</li>
+        <li><b>Disqualify.</b> Value is 0.</li>
+        <li><b>Priority.</b> Fit is 2, Intent is 2, Timing is 2, Authority is 1 or 2, Value is 2, and the total is at least the Priority minimum.</li>
+        <li><b>Qualified.</b> Fit, Intent, Timing, and Value are each 1 or 2, Authority is 1 or 2, and the total is at least the Qualified minimum.</li>
+        <li><b>Escalate.</b> The total equals the review score, or Authority is 0 while Fit is 2 and Value is 1 or 2.</li>
+        <li><b>Nurture.</b> Fit is 1 or 2, and later-contact consent is Yes.</li>
+        <li><b>Escalate.</b> Later-contact consent is not Yes.</li>
+      </ol>
+
+      <div class="cats">
+        <article class="cat">
+          <h3>Priority</h3>
+          <p class="when">Rule 5 only. The prospect asked for a next step, can start inside the window, meets every must-have, and is at or above the minimum.</p>
+          <p class="send">Send the Priority template on an allowed channel. The reviewer replies inside the window on page 4.</p>
+        </article>
+        <article class="cat">
+          <h3>Qualified</h3>
+          <p class="when">Rule 6 only. They match the offer well enough to speak with, and they miss at least one Priority condition.</p>
+          <p class="send">Send the Qualified template. A person runs the next conversation. The agent does not book the work.</p>
+        </article>
+        <article class="cat">
+          <h3>Nurture</h3>
+          <p class="when">Rule 8 only. They fit the offer, and an earlier rule did not fire. Typical case: the date is outside the window, or the total is below the Qualified minimum and is not the review score.</p>
+          <p class="send">Send the Nurture template only. One message now. A later message only on the date you recorded, and only while later-contact consent stays Yes.</p>
+        </article>
+        <article class="cat">
+          <h3>Disqualify</h3>
+          <p class="when">Rules 1, 2, or 4. No consent, a failed fit or a named disqualifier, or no usable budget figure.</p>
+          <p class="send">Rule 1: send nothing. Rules 2 and 4: send the Not a fit template once, and only if inquiry consent is Yes. Do not add a sequence.</p>
+        </article>
+      </div>
+
+      <div class="grid-3 mt">
+        <div>
+          <label class="f">Priority minimum</label>
+          <input type="text" name="pri-min" value="9">
+        </div>
+        <div>
+          <label class="f">Qualified minimum</label>
+          <input type="text" name="qual-min" value="7">
+        </div>
+        <div>
+          <label class="f">Review score</label>
+          <input type="text" name="review-score" value="6">
+        </div>
+      </div>
+      <p class="tiny">Defaults assume a maximum of 10. If you change a number, use the same number in the prompt. Do not lower the Priority minimum below the Qualified minimum.</p>
+
+      <p class="record">Worked record. Scores 2, 2, 2, 1, 2. Total 9. Rules 1–4 do not match. Rule 5 matches. Category Priority. Send the Priority template. A second lead scoring 2, 1, 1, 1, 1 totals 6. Rules 1–6 do not match. Rule 7 matches. Escalate. Send nothing.</p>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>08 / 14</b></footer>
+  </section>
+
+  <!-- 9 PROMPT -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Agent prompt</span></header>
+    <div class="content">
+      <p class="kicker">Page 09 · Paste with page 10</p>
+      <h2>Agent prompt</h2>
+      <p class="lede">Replace every bracket with the worksheet values. Paste from START through END on page 10. Do not paste the examples.</p>
+      <div class="prompt">
+        <span class="mark">Start of prompt</span>
+        <h3>Role</h3>
+        <p>You qualify prospective clients for [AGENCY_NAME]. The only offer you qualify is [OFFER]. You collect missing answers, score them, and return one CRM record. You are not the salesperson. You do not close, price, or book work.</p>
+        <h3>Responsibilities</h3>
+        <ul>
+          <li>Read the inquiry, including any answers the form already stored.</li>
+          <li>If inquiry consent is No, stop. Set category Disqualify. Send no question.</li>
+          <li>If a page-4 disqualifier is already explicit, stop asking. Score Fit 0 and follow the category rules.</li>
+          <li>Ask required questions that are still blank, one at a time, in numeric order.</li>
+          <li>Score Fit, Intent, Timing, Authority, and Value only with the definitions below.</li>
+          <li>Assign the category by walking the rules in order and stopping at the first match.</li>
+          <li>Return the record in the output format. Do not add fields.</li>
+        </ul>
+        <h3>Conversation rules</h3>
+        <ul>
+          <li>Tone: [TONE]. Default: plain, specific, and calm. No urgency and no slang.</li>
+          <li>Ask one question per turn. Do not ask a question the prospect already answered.</li>
+          <li>Required questions are those marked required on the question worksheet. If that worksheet is blank, required questions are 1, 3, 4, 6, 7, 8, and 9.</li>
+          <li>Use the worksheet wording when it is filled in. Otherwise use the default wording below.</li>
+          <li>Accept an answer only when it is specific enough to score. If it is not, ask that question once more, in different words. Two asks is the maximum.</li>
+          <li>If they say they do not want contact, stop. Set consent_inquiry to No.</li>
+          <li>Do not ask for a channel they already declined. Record the channel they chose.</li>
+        </ul>
+        <h3>Default questions</h3>
+        <ol>
+          <li>What outcome do you want an agency to deliver?</li>
+          <li>What is in place today? Optional.</li>
+          <li>What changed that made you look for an agency now?</li>
+          <li>Which brand, product, or business is this for?</li>
+          <li>What have you already tried, including other agencies? Optional.</li>
+          <li>When do you need a decision or a start?</li>
+          <li>What budget or fee range is approved or under discussion?</li>
+          <li>Who can approve the engagement?</li>
+          <li>What constraints apply to platform, market, or contract type?</li>
+          <li>What would make the first 90 days a success? Optional.</li>
+        </ol>
+        <h3>Values from the worksheet</h3>
+        <p>Decision window: [DECISION_WINDOW_DAYS] days from the day the inquiry arrives. Minimum: [MINIMUM_VALUE]. Floor: [VALUE_FLOOR]. Must-haves: [MUST_HAVES]. Secondary: [SECONDARY]. Disqualifiers: [DISQUALIFIERS]. Priority minimum: [PRIORITY_MIN]. Qualified minimum: [QUALIFIED_MIN]. Review score: [REVIEW_SCORE]. Reviewer: [REVIEWER_NAME].</p>
+        <h3>Scoring</h3>
+        <p>Fit 2: every must-have matches and no disqualifier is present. Fit 1: exactly one secondary miss and no disqualifier. Fit 0: any must-have fails or any disqualifier is present. If Secondary is blank, do not use Fit 1.</p>
+        <p>Intent 2: they named the problem and asked for a call, proposal, audit, or pricing. Intent 1: they named the problem and did not ask for a next step. Intent 0: no problem named, or the only ask is unpaid speculative work.</p>
+        <p>Timing 2: a decision or start date on or before the last day of the window. Timing 1: a month, quarter, or date after the window. Timing 0: no time reference, or they are not deciding and not starting.</p>
+        <p>Authority 2: the speaker is the budget holder, or that person is copied or booked. Authority 1: they name the budget holder and their own role, and that person is not involved yet. Authority 0: they cannot name the budget holder, or they have no role.</p>
+        <p>Value 2: a number or range is stated and the low end is at or above the minimum. Value 1: a number or range is stated, the low end is below the minimum, and the high end is at or above the floor. Value 0: no number or range, or the high end is below the floor. “Flexible” is not a number. Do not convert currency.</p>
+        <p>If a definition does not match, leave the factor blank. Do not choose the closer score. These are too vague to score: “grow,” “just looking,” “soon,” “flexible,” and “the team.” Total is the sum of five scores. A blank factor means no total.</p>
+      </div>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>09 / 14</b></footer>
+  </section>
+
+  <!-- 10 PROMPT CONTINUED -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Agent prompt, continued</span></header>
+    <div class="content">
+      <p class="kicker">Page 10 · Continues the paste</p>
+      <h2>Rules, output, and limits</h2>
+      <div class="prompt">
+        <h3>Category rules — stop at the first match</h3>
+        <ol>
+          <li>Disqualify if inquiry consent is No.</li>
+          <li>Disqualify if any disqualifier is present or Fit is 0.</li>
+          <li>Escalate if any required question is unanswered after two asks, or any factor is blank.</li>
+          <li>Disqualify if Value is 0.</li>
+          <li>Priority if Fit is 2, Intent is 2, Timing is 2, Authority is 1 or 2, Value is 2, and total is at least [PRIORITY_MIN].</li>
+          <li>Qualified if Fit, Intent, Timing, and Value are each at least 1, Authority is 1 or 2, and total is at least [QUALIFIED_MIN].</li>
+          <li>Escalate if total equals [REVIEW_SCORE], or Authority is 0 while Fit is 2 and Value is at least 1.</li>
+          <li>Nurture if Fit is at least 1 and later-contact consent is Yes.</li>
+          <li>Escalate if later-contact consent is not Yes.</li>
+        </ol>
+        <h3>CRM output</h3>
+        <p>Return only this block, one value per line. Use Yes, No, or Unasked for consent. Use Email, Phone, SMS, or None for channel. Category is Priority, Qualified, Nurture, Disqualify, or Escalate. Leave escalation_reason empty unless category is Escalate. Leave optional answers blank. Do not write 0 for an unasked question.</p>
+        <div class="grid-2">
+          <p>lead_id:<br>received_at:<br>source:<br>name:<br>email:<br>phone:<br>company:<br>offer: [OFFER]<br>q1:<br>q2:<br>q3:<br>q4:<br>q5:<br>q6:<br>q7:<br>q8:<br>q9:<br>q10:</p>
+          <p>fit:<br>intent:<br>timing:<br>authority:<br>value:<br>total:<br>disqualifier:<br>category:<br>escalation_reason:<br>consent_inquiry:<br>consent_later:<br>channel:<br>consent_text:<br>next_step:</p>
+        </div>
+        <p>next_step is “Reviewer replies” for Priority, “Send Qualified template” for Qualified, “Send Nurture template” for Nurture, “Send Not a fit once” or “Send nothing” for Disqualify, and “Hold message and alert [REVIEWER_NAME]” for Escalate.</p>
+        <h3>Escalation</h3>
+        <p>Escalate, send no sales message, and name the reason when a required answer is still missing after two asks, any factor is blank, the total equals the review score, Authority is 0 on an otherwise strong fit, later-contact consent is required and is not Yes, the prospect asks for a person, or you cannot tell whether a disqualifier applies.</p>
+        <h3>Prohibited</h3>
+        <ul>
+          <li>Do not invent a budget, a date, a title, or a reason they did not state.</li>
+          <li>Do not change a score so the total reaches a cutoff.</li>
+          <li>Do not quote a fee, offer a discount, guarantee a result, or send a contract.</li>
+          <li>Do not book a meeting, take payment, or ask for a card, password, or government ID.</li>
+          <li>Do not claim to be human. Do not argue with a disqualifier.</li>
+          <li>Do not keep questioning after inquiry consent is No.</li>
+          <li>Do not send email, phone, or SMS yourself. The workflow sends one template after the record is stored.</li>
+          <li>Do not choose a channel they did not select.</li>
+        </ul>
+        <span class="mark">End of prompt</span>
+      </div>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>10 / 14</b></footer>
+  </section>
+
+  <!-- 11 EXAMPLES + WORKFLOW -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Examples and workflow</span></header>
+    <div class="content">
+      <p class="kicker">Page 11</p>
+      <h2>Examples and the workflow</h2>
+      <p class="lede">The examples show a finished record. Do not paste them into the agent. Minimum 8,000 USD a month. Floor 3,000. Window 90 days. Must-haves: paid-media retainer, established brand, United States. No secondary signals. Inquiry consent is Yes. Channel is Email.</p>
+
+      <div class="grid-2 mt">
+        <article class="ex">
+          <h3>Example A · Priority</h3>
+          <div class="turn"><b>Prospect</b><span>I’m the founder of Northline, a US skincare brand. We need an agency to run paid media. Can we book a call this month? Budget is 10–14k USD a month.</span></div>
+          <div class="turn"><b>Agent</b><span>What changed that made you look now?</span></div>
+          <div class="turn"><b>Prospect</b><span>In-house ads stalled after the last launch. US only. A monthly retainer is fine.</span></div>
+          <p class="record">Fit 2, Intent 2, Timing 2, Authority 2, Value 2. Total 10. Rule 5. Priority. next_step: Reviewer replies. consent_later: Unasked. The workflow may send the Priority template by email. It may not start a nurture sequence.</p>
+        </article>
+        <article class="ex">
+          <h3>Example B · Nurture</h3>
+          <div class="turn"><b>Prospect</b><span>We’re a US retailer exploring paid media for later. No decision is planned and there is no date. I’m the marketing manager. Our CMO, Priya Shah, would approve. The figure discussed was 6–9k USD a month. Please don’t send a proposal. Email is fine for a later note.</span></div>
+          <div class="turn"><b>Agent</b><span>Asks nothing else. The form already stored later-contact consent Yes and channel Email.</span></div>
+          <p class="record">Fit 2, Intent 1, Timing 0, Authority 1, Value 1. Total 5. Rules 1–7 do not match. Rule 8. Nurture. Send the Nurture template once by email. A second message only if you stored a revisit date and consent is still Yes.</p>
+        </article>
+      </div>
+
+      <div class="flow">
+        <ol class="steps">
+          <li><b>1 · Arrive</b><span>Form, chat, or email. Store the source, the time, and the consent text shown.</span></li>
+          <li><b>2 · Consent gate</b><span>If inquiry consent is No, set Disqualify, write the CRM, and send nothing.</span></li>
+          <li><b>3 · Ask the gaps</b><span>The agent asks unanswered required questions, one per turn, twice at most.</span></li>
+          <li><b>4 · Score</b><span>Each factor is 0, 1, 2, or blank. Blank means there is no total.</span></li>
+          <li><b>5 · Categorize</b><span>Walk rules 1–9 on page 8. Stop at the first match.</span></li>
+          <li><b>6 · Write the CRM</b><span>Write every required field on page 12, then the message step.</span></li>
+          <li><b>7 · Send or hold</b><span>Send the one matching template on the allowed channel, or hold it.</span></li>
+          <li><b>8 · Person</b><span>The reviewer takes Priority inside the reply window, and takes every Escalate the same day.</span></li>
+        </ol>
+        <div>
+          <div class="branch">
+            <b>Consent is No</b>
+            Stop at step 2. Do not ask questions. Do not send a close.
+          </div>
+          <div class="branch">
+            <b>Factor blank or rule 3, 7, or 9</b>
+            Category Escalate. Alert the reviewer. Hold every template.
+          </div>
+          <div class="branch">
+            <b>CRM write fails</b>
+            Do not send. Alert the reviewer with the record the agent returned. Retry the write once, then stop.
+          </div>
+          <div class="branch">
+            <b>Channel missing</b>
+            Reply only on the channel the inquiry arrived on. Do not add phone or SMS.
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>11 / 14</b></footer>
+  </section>
+
+  <!-- 12 CRM -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>CRM capture</span></header>
+    <div class="content">
+      <p class="kicker">Page 12</p>
+      <h2>CRM information to capture</h2>
+      <p class="lede">Create these fields before you connect the agent. A lead is not routed until the required row is stored. If a required write fails, hold the message.</p>
+      <table class="tight mt">
+        <thead>
+          <tr>
+            <th style="width:8mm"></th>
+            <th>Field</th>
+            <th style="width:28mm">Source</th>
+            <th>What “done” means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><input type="checkbox" name="c1"></td><td>Lead id, source, received time</td><td>Workflow</td><td>A new inquiry can be found without opening the thread.</td></tr>
+          <tr><td><input type="checkbox" name="c2"></td><td>Name, email, phone, company</td><td>Form or agent</td><td>Blank phone is allowed. Blank email is allowed only if the channel is Phone.</td></tr>
+          <tr><td><input type="checkbox" name="c3"></td><td>Offer</td><td>Workflow</td><td>Matches the offer on page 4, not a label the agent invented.</td></tr>
+          <tr><td><input type="checkbox" name="c4"></td><td>Answers q1–q10</td><td>Form or agent</td><td>Unasked optional questions stay blank. They are not scored as zero.</td></tr>
+          <tr><td><input type="checkbox" name="c5"></td><td>Fit, Intent, Timing, Authority, Value, total</td><td>Agent</td><td>Each score is 0, 1, 2, or blank. Total is empty when any factor is blank.</td></tr>
+          <tr><td><input type="checkbox" name="c6"></td><td>Disqualifier, if any</td><td>Agent</td><td>The page-4 line that matched, copied, not paraphrased.</td></tr>
+          <tr><td><input type="checkbox" name="c7"></td><td>Category and escalation reason</td><td>Agent</td><td>One of the five outputs. Reason filled only for Escalate.</td></tr>
+          <tr><td><input type="checkbox" name="c8"></td><td>Inquiry consent and the sentence they saw</td><td>Form</td><td>Yes or No, plus the exact sentence and the time they agreed or declined.</td></tr>
+          <tr><td><input type="checkbox" name="c9"></td><td>Later-contact consent</td><td>Form or agent</td><td>Yes, No, or Unasked. Nurture requires Yes.</td></tr>
+          <tr><td><input type="checkbox" name="c10"></td><td>Channel preference</td><td>Form or inbound</td><td>Email, Phone, SMS, or None. None means reply only on the inbound channel.</td></tr>
+          <tr><td><input type="checkbox" name="c11"></td><td>Owner and next step</td><td>Workflow</td><td>Priority and Escalate assign the reviewer. Others name the template, or “send nothing.”</td></tr>
+          <tr><td><input type="checkbox" name="c12"></td><td>Message status</td><td>Workflow</td><td>Unsent, Sent, Held, or Not allowed. Store the template name and the time.</td></tr>
+        </tbody>
+      </table>
+      <div class="note mt">
+        <strong>Put this on the form, above the submit button.</strong> Inquiry consent, unchecked by default: “I agree that [AGENCY] may contact me about this inquiry on the channel I select.” Later-contact consent, a separate checkbox, unchecked by default: “I agree that [AGENCY] may send one later note about [OFFER].” Channel, at least one choice and none pre-selected: Email, Phone, SMS. Store the sentence, the answer, and the time. A missing checkbox is Unasked, not Yes.
+      </div>
+      <div class="note mt">
+        <strong>Duplicates and STOP.</strong> Match on email first, then phone. Update the open lead. Do not open a second sequence. When a person replies STOP, or withdraws consent, set later-contact consent to No, stop every future message, and keep the record.
+      </div>
+      <label class="f">Where these fields live in your CRM</label>
+      <input type="text" name="crm-name" placeholder="CRM name and the object, such as Lead or Deal">
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>12 / 14</b></footer>
+  </section>
+
+  <!-- 13 MESSAGES -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Follow-up messages</span></header>
+    <div class="content">
+      <p class="kicker">Page 13</p>
+      <h2>Follow-up templates</h2>
+      <p class="lede">Send a template only when every gate below is true. Replace the brackets. Do not add a second pitch, a discount, or a claim the prospect did not make.</p>
+      <div class="note">
+        <strong>Consent gate.</strong> Inquiry consent is Yes. The channel is one they chose, or, if they chose none, the channel the inquiry arrived on. Phone and SMS are never inferred from an email. Nurture also requires later-contact consent Yes. Disqualify under rule 1 sends nothing. STOP, or any withdrawal, ends later messages and is written to the CRM the same day. Each email tells them they can reply “stop.” Each SMS includes STOP. A phone script asks permission to talk before any qualification recap.
+      </div>
+
+      <div class="grid-2" style="margin-top:2mm">
+        <div>
+          <label class="f">Sender name</label>
+          <input type="text" name="sender">
+        </div>
+        <div>
+          <label class="f">Agency name in the signature</label>
+          <input type="text" name="sig-agency">
+        </div>
+      </div>
+
+      <article class="msg">
+        <h3>Priority</h3>
+        <p class="subline">Subject: Re: [OFFER] for [COMPANY]</p>
+        <p>[FIRST NAME] — you asked to talk about [OUTCOME THEY NAMED]. I’m [SENDER], and I own this at [AGENCY]. I can do [TWO TIMES THEY CAN REFUSE]. If another person approves the fee, copy them. Reply stop and we will not write again about this inquiry.</p>
+      </article>
+      <article class="msg">
+        <h3>Qualified</h3>
+        <p class="subline">Subject: Next step on [OFFER]</p>
+        <p>[FIRST NAME] — thank you for the detail on [OUTCOME THEY NAMED]. The next step is a short call with [SENDER] to confirm scope. Have the budget holder on the thread if that is not you. We will use [CHANNEL] only. Reply stop and we will close the inquiry without another message.</p>
+      </article>
+      <article class="msg">
+        <h3>Nurture</h3>
+        <p class="subline">Subject: We’ll leave [COMPANY] until [REVISIT]</p>
+        <p>[FIRST NAME] — you do not have a start date inside our window, so we will not push a proposal. You asked us to keep email. We will send this note only, then one note on [REVISIT DATE], unless you reply stop before then. Nothing else is scheduled. [SENDER], [AGENCY].</p>
+      </article>
+      <article class="msg">
+        <h3>Not a fit</h3>
+        <p class="subline">Subject: About your note to [AGENCY]</p>
+        <p>[FIRST NAME] — we are not the right agency for this one. The reason is [DISQUALIFIER OR BUDGET FLOOR, IN THEIR WORDS]. We will not add you to a list and we will not send a follow-up. [SENDER], [AGENCY].</p>
+      </article>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>13 / 14</b></footer>
+  </section>
+
+  <!-- 14 IMPLEMENTATION + TEST -->
+  <section class="page">
+    <header class="run"><span>Lead qualification starter kit</span><span>Implement and test</span></header>
+    <div class="content">
+      <p class="kicker">Page 14</p>
+      <h2>Implementation and testing</h2>
+      <p class="lede">Do the setup in this order. Run all six tests on copies, not on live inquiries. Go live only if every test matches the expected result. Use the practice numbers from page 11: minimum 8,000 USD a month, floor 3,000, window 90 days, must-haves of paid-media retainer, established brand, and United States, plus a disqualifier for student or job research. After those six pass, rerun test 1 with your own page 4 values.</p>
+      <ul class="checks">
+        <li><input type="checkbox" name="s1"><span>Page 4 is complete, and the floor is below the minimum.</span><input type="text" name="s1o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s2"><span>Page 6 wordings are in the agent, or the defaults are accepted.</span><input type="text" name="s2o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s3"><span>Cutoffs on page 8 match the brackets in the pasted prompt.</span><input type="text" name="s3o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s4"><span>Prompt from START through END is pasted. Examples are not.</span><input type="text" name="s4o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s5"><span>CRM fields on page 12 exist, including both consent fields.</span><input type="text" name="s5o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s6"><span>Four templates and the consent gate are loaded. STOP is handled.</span><input type="text" name="s6o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s7"><span>Workflow matches page 11, including hold on a failed CRM write.</span><input type="text" name="s7o" placeholder="Owner"></li>
+        <li><input type="checkbox" name="s8"><span>Reviewer and backup know Priority and Escalate land the same day.</span><input type="text" name="s8o" placeholder="Owner"></li>
+      </ul>
+
+      <table class="tight mt">
+        <thead>
+          <tr>
+            <th style="width:8mm"></th>
+            <th>Test lead</th>
+            <th>Expected</th>
+            <th style="width:32mm">What you observed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><input type="checkbox" name="t1"></td><td>Founder of a US brand. Wants paid media. Asks for a call this month. Budget 10–14k USD a month. In-house ads have stalled. Monthly retainer is fine.</td><td>Priority. One email. Reviewer assigned. No nurture sequence.</td><td><input type="text" name="t1n"></td></tr>
+          <tr><td><input type="checkbox" name="t2"></td><td>US retailer. Exploring paid media. No date and no decision planned. Marketing manager names CMO Priya Shah. Budget 6–9k USD. Later-email consent Yes. No proposal requested.</td><td>Nurture. One email. No call booked. No second message unless a revisit date is stored.</td><td><input type="text" name="t2n"></td></tr>
+          <tr><td><input type="checkbox" name="t3"></td><td>Same facts as test 1, except the budget is “flexible” on both asks.</td><td>Escalate. Value blank. No template sent.</td><td><input type="text" name="t3n"></td></tr>
+          <tr><td><input type="checkbox" name="t4"></td><td>The prospect says they are a student researching agencies. Inquiry consent is Yes.</td><td>Disqualify. One Not a fit email that states that reason. No sequence.</td><td><input type="text" name="t4n"></td></tr>
+          <tr><td><input type="checkbox" name="t5"></td><td>Matches every must-have. Names a problem and does not ask for a call. Gives a date after the window. Names the budget holder, who is not involved. Budget 6–9k USD against an 8k minimum and a 3k floor.</td><td>Scores 2, 1, 1, 1, 1. Total 6. Escalate. No template.</td><td><input type="text" name="t5n"></td></tr>
+          <tr><td><input type="checkbox" name="t6"></td><td>Test 1 again, with the CRM write forced to fail.</td><td>No email. Reviewer alerted. One retry, then stop.</td><td><input type="text" name="t6n"></td></tr>
+        </tbody>
+      </table>
+
+      <div class="sign">
+        <div>
+          <label class="f">Tested by</label>
+          <input type="text" name="tester">
+        </div>
+        <div>
+          <label class="f">Date</label>
+          <input type="text" name="test-date">
+        </div>
+        <div>
+          <label class="f">Result</label>
+          <input type="text" name="result" placeholder="Ready or Hold">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label class="f">First live-review date</label>
+          <input type="text" name="live-review">
+        </div>
+        <div>
+          <label class="f">Hold reason, if any</label>
+          <input type="text" name="hold-reason">
+        </div>
+      </div>
+      <p class="tiny mt">Ready means all eight setup rows and all six tests passed. Hold means do not connect live traffic. On the first review date, reread ten live records against page 7. Correct the prompt if any score was negotiated instead of matched.</p>
+    </div>
+    <footer class="runfoot"><span>Agency edition</span><b>14 / 14</b></footer>
+  </section>
+</body>
+</html>

@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI AUTOMATION TESTING CHECKLIST</title>
+  <style>
+    @font-face {
+      font-family: "Newsreader";
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url("fonts/newsreader.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Newsreader";
+      font-style: italic;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url("fonts/newsreader-italic.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Source Sans 3";
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+      src: url("fonts/source-sans.woff2") format("woff2");
+    }
+
+    :root {
+      --ink: #1c1a17;
+      --muted: #5c564e;
+      --faint: #6d675f;
+      --line: #e3ddd3;
+      --line-strong: #c9c2b6;
+      --rule: #1c1a17;
+      --accent: #1e3d34;
+      --paper: #f3f0e8;
+      --ready: #1e3d34;
+      --ready-bg: #f3f6f4;
+      --warn: #8a5a12;
+      --warn-bg: #f8f4ec;
+      --stop: #7c3430;
+      --stop-bg: #f8f2f1;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: var(--ink);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-weight: 400;
+      font-size: 9.5pt;
+      line-height: 1.38;
+    }
+
+    @page { size: A4; margin: 0; }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      padding: 11mm 15mm 9mm;
+      background: #fff;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+      display: flex;
+      flex-direction: column;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    .run {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8mm;
+      padding-bottom: 2.1mm;
+      border-bottom: 0.6pt solid var(--rule);
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .run span:last-child { color: var(--accent); }
+
+    .runfoot {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 0.4pt solid var(--line);
+      padding-top: 2.2mm;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .runfoot b {
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.08em;
+    }
+
+    .content { padding-top: 6.5mm; }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .screen-note {
+      max-width: 210mm;
+      margin: 0 auto 12px;
+      padding: 10px 14px;
+      background: #1e3d34;
+      color: #f3f0e8;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    @media print { .screen-note { display: none; } }
+    @media screen {
+      body { background: #d8d3c9; padding: 18px 0 32px; }
+      .page {
+        margin: 0 auto 16px;
+        box-shadow: 0 12px 32px rgba(40, 32, 20, 0.14);
+      }
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      min-width: 0;
+      border: none;
+      border-bottom: 0.45pt solid var(--line-strong);
+      background: transparent;
+      color: var(--ink);
+      font: inherit;
+      font-size: 9.5pt;
+      line-height: 1.3;
+      padding: 0 0 0.3mm;
+      border-radius: 0;
+      resize: none;
+    }
+    textarea { height: 10.5mm; display: block; }
+    input[type="text"]:focus, textarea:focus {
+      outline: none;
+      border-bottom-color: var(--accent);
+    }
+    input[type="checkbox"] {
+      width: 3.8mm;
+      height: 3.8mm;
+      margin: 0;
+      accent-color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    /* Cover */
+    .cover {
+      background: var(--paper);
+      padding: 16mm 16mm 12mm 18mm;
+    }
+    .cover::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 7mm;
+      background: var(--accent);
+    }
+    .cover-top, .cover-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 8pt;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cover-main { margin-top: 52mm; max-width: 168mm; }
+    .eyebrow {
+      font-size: 8.5pt;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cover h1 {
+      margin-top: 5mm;
+      font-family: "Newsreader", "Palatino Linotype", Palatino, serif;
+      font-weight: 500;
+      font-size: 34pt;
+      line-height: 0.92;
+      letter-spacing: -0.015em;
+      text-transform: uppercase;
+    }
+    .cover .rule {
+      width: 22mm;
+      height: 0;
+      border-top: 0.9pt solid var(--accent);
+      margin: 7mm 0 6mm;
+    }
+    .cover .sub {
+      max-width: 142mm;
+      font-family: "Newsreader", "Palatino Linotype", Palatino, serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 13.5pt;
+      line-height: 1.35;
+      color: #3a3631;
+    }
+    .cover-bottom { margin-top: auto; }
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6mm;
+      border-top: 0.6pt solid var(--rule);
+      padding-top: 4.5mm;
+    }
+    .cover-meta span {
+      display: block;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 1.2mm;
+    }
+    .cover-meta strong {
+      display: block;
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 12pt;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--ink);
+    }
+    .cover-note {
+      margin-top: 6mm;
+      font-size: 9.5pt;
+      color: var(--muted);
+    }
+    .cover-foot {
+      margin-top: 7mm;
+      color: var(--faint);
+    }
+    .cover-foot b { color: var(--ink); font-weight: 600; }
+
+    /* Intro */
+    .page-title {
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 22pt;
+      letter-spacing: -0.02em;
+      line-height: 1.02;
+    }
+    .lede {
+      margin-top: 3.5mm;
+      max-width: 172mm;
+      font-size: 10.5pt;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+    .lede + .lede { margin-top: 2mm; color: var(--muted); }
+
+    .steps {
+      list-style: none;
+      margin: 5mm 0 0;
+      padding: 0;
+      counter-reset: step;
+    }
+    .steps li {
+      display: grid;
+      grid-template-columns: 9mm 1fr;
+      gap: 2mm;
+      padding: 2.15mm 0;
+      border-top: 0.35pt solid var(--line);
+      font-size: 10pt;
+      line-height: 1.35;
+    }
+    .steps li:last-child { border-bottom: 0.35pt solid var(--line); }
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step, decimal-leading-zero);
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 11pt;
+      color: var(--accent);
+      line-height: 1.25;
+    }
+    .steps strong { font-weight: 600; }
+
+    .callout {
+      margin-top: 4.5mm;
+      padding: 3.4mm 4.2mm 3.6mm;
+      background: #efece4;
+      border-left: 2.2pt solid var(--accent);
+    }
+    .callout h2 {
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 12pt;
+      margin-bottom: 1mm;
+    }
+    .callout p { font-size: 9.5pt; line-height: 1.38; }
+
+    .block-label {
+      margin: 5mm 0 2mm;
+      font-size: 7.5pt;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    th, td {
+      text-align: left;
+      vertical-align: middle;
+      padding: 1.45mm 2mm;
+      font-weight: 400;
+    }
+    thead th {
+      font-size: 7pt;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--faint);
+      border-bottom: 0.7pt solid var(--rule);
+      padding-bottom: 1.3mm;
+    }
+    td {
+      border-bottom: 0.35pt solid var(--line);
+      font-size: 9pt;
+    }
+    td.lab {
+      width: 32mm;
+      color: var(--muted);
+      font-size: 8pt;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+    td input[type="text"] { height: 5.4mm; border-bottom: none; }
+
+    .marks {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4mm;
+      margin-top: 1mm;
+    }
+    .marks article {
+      padding-top: 1.5mm;
+      border-top: 0.7pt solid var(--rule);
+    }
+    .marks h3 {
+      font-size: 9pt;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.8mm;
+    }
+    .marks p { font-size: 8.5pt; line-height: 1.32; color: var(--muted); }
+    .marks .pass h3 { color: var(--ready); }
+    .marks .partial h3 { color: var(--warn); }
+    .marks .fail h3 { color: var(--stop); }
+
+    /* Gates */
+    .gate { border-top: 0.7pt solid var(--rule); padding-top: 3mm; }
+    .gate + .gate { margin-top: 6.5mm; }
+    .sec-head {
+      display: grid;
+      grid-template-columns: 11mm 1fr;
+      column-gap: 2.5mm;
+      align-items: start;
+    }
+    .sec-num {
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 15pt;
+      line-height: 1;
+      color: var(--accent);
+      padding-top: 0.6mm;
+    }
+    .gate h2 {
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 15.5pt;
+      letter-spacing: -0.018em;
+      line-height: 1.02;
+    }
+    .dek {
+      margin-top: 1.3mm;
+      font-size: 9.5pt;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+
+    .item { padding: 2.7mm 0 0; }
+    .item + .item { margin-top: 1.6mm; border-top: 0.35pt solid var(--line); padding-top: 2.6mm; }
+    .item-top {
+      display: grid;
+      grid-template-columns: 14mm 1fr auto;
+      column-gap: 2mm;
+      align-items: baseline;
+    }
+    .item-id { font-variant-numeric: tabular-nums; }
+    .item-id .n {
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 11pt;
+      color: var(--ink);
+    }
+    .crit {
+      margin-left: 1.8mm;
+      font-size: 7pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stop);
+      white-space: nowrap;
+    }
+    .item h3 {
+      font-size: 10.5pt;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      line-height: 1.2;
+    }
+    .done {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5mm;
+      font-size: 7.5pt;
+      font-weight: 650;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cols {
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr 1fr;
+      gap: 4.2mm;
+      margin-top: 2mm;
+    }
+    .lbl {
+      display: block;
+      margin-bottom: 0.6mm;
+      font-size: 6.7pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .cols p { font-size: 8.7pt; line-height: 1.34; color: #26231f; }
+    .findings {
+      display: grid;
+      grid-template-columns: 18mm 1fr;
+      gap: 2mm;
+      align-items: end;
+      margin-top: 2.1mm;
+    }
+    .findings span {
+      font-size: 6.7pt;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--faint);
+      padding-bottom: 0.7mm;
+    }
+    .findings input { height: 6mm; }
+
+    .sec-foot {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 5mm;
+      margin-top: 2.6mm;
+      padding-top: 1.6mm;
+      font-size: 8pt;
+      color: var(--muted);
+    }
+    .sec-foot .who {
+      display: flex;
+      align-items: center;
+      gap: 1.4mm;
+      flex: 0 0 auto;
+    }
+    .sec-foot input {
+      width: 24mm;
+      max-width: 24mm;
+      min-width: 0;
+      height: 5mm;
+      font-size: 8.5pt;
+    }
+    .choices {
+      display: flex;
+      align-items: center;
+      gap: 2.6mm;
+      margin-left: auto;
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+    .choices label, .pick label, .done {
+      cursor: pointer;
+    }
+    .choices label {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.2mm;
+      color: var(--ink);
+      font-size: 8pt;
+      font-weight: 600;
+    }
+
+    /* Results */
+    .split-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 6mm;
+      margin-bottom: 2mm;
+    }
+    .split-title h2 {
+      font-family: "Newsreader", Palatino, serif;
+      font-weight: 500;
+      font-size: 15.5pt;
+      letter-spacing: -0.018em;
+    }
+    .hint { font-size: 8.5pt; color: var(--muted); }
+    .results { margin-top: 5.2mm; }
+    .results table { margin-top: 1.5mm; }
+    td.ctr { text-align: center; }
+    td.ctr input { text-align: center; }
+    .narrow { width: 16mm; }
+    .status { width: 28mm; }
+
+    /* Decision */
+    .assess { margin-top: 4mm; }
+    .ruleline {
+      margin-top: 3.2mm;
+      font-size: 9pt;
+      line-height: 1.38;
+      color: var(--ink);
+    }
+    .intro .steps { margin-top: 6.5mm; }
+    .intro .steps li { padding: 2.7mm 0; }
+    .intro .callout { margin-top: 6mm; }
+    .intro .block-label { margin-top: 6.5mm; }
+    .intro td { padding-top: 1.9mm; padding-bottom: 1.9mm; }
+
+    .outcomes {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3.2mm;
+      margin-top: 3.2mm;
+      align-items: stretch;
+    }
+    .outcome {
+      height: 100%;
+      min-height: 62mm;
+      padding: 3mm 3.2mm 3.2mm;
+      border-top: 2.2pt solid var(--line-strong);
+      background: #fff;
+    }
+    .outcome.ready { border-top-color: var(--ready); background: var(--ready-bg); }
+    .outcome.improve { border-top-color: var(--warn); background: var(--warn-bg); }
+    .outcome.stop { border-top-color: var(--stop); background: var(--stop-bg); }
+    .pick {
+      display: flex;
+      align-items: center;
+      gap: 2mm;
+    }
+    .pick span {
+      font-family: "Newsreader", Palatino, serif;
+      font-size: 13pt;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1;
+    }
+    .outcome .when {
+      margin: 2mm 0 1.6mm;
+      font-size: 8pt;
+      line-height: 1.3;
+      color: var(--muted);
+    }
+    .outcome ul {
+      margin: 0;
+      padding-left: 3.4mm;
+    }
+    .outcome li {
+      margin: 0 0 1.15mm;
+      font-size: 8pt;
+      line-height: 1.28;
+    }
+    .follow {
+      margin-top: 3.4mm;
+    }
+    .follow .row {
+      display: grid;
+      grid-template-columns: 1fr 42mm 36mm;
+      gap: 4mm;
+      margin-top: 1.5mm;
+    }
+    .follow .lbl { margin-bottom: 1mm; }
+    .signoff { margin-top: 3.6mm; }
+    .sign td { height: 11mm; vertical-align: bottom; }
+    .sign input { border-bottom: none; }
+  </style>
+</head>
+<body>
+  <p class="screen-note">Fill this copy on screen, then print or save as A4 with background graphics on and margins set to none. A blank print-ready PDF sits beside this file.</p>
+
+  <section class="page cover">
+    <div class="cover-top">
+      <span>Operations resource</span>
+      <span>Edition 01</span>
+    </div>
+    <div class="cover-main">
+      <p class="eyebrow">Pre-implementation test</p>
+      <h1>AI Automation<br>Testing Checklist</h1>
+      <div class="rule"></div>
+      <p class="sub">A practical guide to testing AI automations before relying on them in real business operations.</p>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-meta">
+        <div>
+          <span>Format</span>
+          <strong>A4 · Seven gates</strong>
+        </div>
+        <div>
+          <span>For</span>
+          <strong>Business operations</strong>
+        </div>
+        <div>
+          <span>Decision</span>
+          <strong>Ready, improve, or stop</strong>
+        </div>
+      </div>
+      <p class="cover-note">Fourteen checks. One named automation. A recorded decision before the work depends on it.</p>
+      <div class="cover-foot">
+        <span>Internal use</span>
+        <b>01</b>
+      </div>
+    </div>
+  </section>
+
+  <section class="page intro">
+    <header class="run">
+      <span>AI Automation Testing Checklist</span>
+      <span>How to use</span>
+    </header>
+    <div class="content">
+      <h2 class="page-title">How to use this checklist</h2>
+      <p class="lede">Use this on one automation and one process, with the person who owns that process. Finished pages are the decision record for whether the operation can rely on the automation.</p>
+      <p class="lede">Take the gates in order. A later test does not repair an unclear outcome, a threshold chosen after the scores are in, or a fallback that has never been used.</p>
+
+      <ol class="steps">
+        <li><span><strong>Name the work.</strong> Complete the record below before any check is marked.</span></li>
+        <li><span><strong>Test in order.</strong> Finish both checks in a gate, including findings, before the next gate.</span></li>
+        <li><span><strong>Mark from evidence.</strong> A check is complete only when the success criteria are met and the source is written down.</span></li>
+        <li><span><strong>Choose one outcome.</strong> On the last page, select Ready, Needs Improvement, or Not Ready. Do not widen use past a failed critical check.</span></li>
+      </ol>
+
+      <aside class="callout">
+        <h2>Critical checks</h2>
+        <p>Four checks decide whether use can expand: accuracy on known cases (2.1), messy and exceptional cases (3.1), named authority to intervene (5.1), and a fallback that has been run (6.1). If any one of them fails, the outcome is Not Ready.</p>
+      </aside>
+
+      <p class="block-label">Automation record</p>
+      <table class="record">
+        <tbody>
+          <tr>
+            <td class="lab">Automation</td>
+            <td><input type="text" name="automation" aria-label="Automation name"></td>
+            <td class="lab">Process</td>
+            <td><input type="text" name="process" aria-label="Process"></td>
+          </tr>
+          <tr>
+            <td class="lab">Owner</td>
+            <td><input type="text" name="owner" aria-label="Process owner"></td>
+            <td class="lab">Reviewer</td>
+            <td><input type="text" name="reviewer" aria-label="Reviewer"></td>
+          </tr>
+          <tr>
+            <td class="lab">System</td>
+            <td><input type="text" name="system" aria-label="System or model"></td>
+            <td class="lab">Environment</td>
+            <td><input type="text" name="environment" aria-label="Environment"></td>
+          </tr>
+          <tr>
+            <td class="lab">Date opened</td>
+            <td><input type="text" name="date_opened" aria-label="Date opened"></td>
+            <td class="lab">Sample size</td>
+            <td><input type="text" name="sample_size" aria-label="Sample size"></td>
+          </tr>
+          <tr>
+            <td class="lab">Threshold</td>
+            <td><input type="text" name="accuracy" aria-label="Agreed accuracy threshold"></td>
+            <td class="lab">Time limit</td>
+            <td><input type="text" name="time_limit" aria-label="Agreed time limit"></td>
+          </tr>
+          <tr>
+            <td class="lab">Outcome</td>
+            <td colspan="3"><input type="text" name="business_outcome" aria-label="Business outcome in one sentence"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="block-label">How to mark a check</p>
+      <div class="marks">
+        <article class="pass">
+          <h3>Pass</h3>
+          <p>The success criteria are met, and the evidence is written in Findings.</p>
+        </article>
+        <article class="partial">
+          <h3>Partial</h3>
+          <p>The gap is specific, owned, and dated. A partial is not a pass.</p>
+        </article>
+        <article class="fail">
+          <h3>Fail</h3>
+          <p>The criteria are not met, or the evidence does not exist.</p>
+        </article>
+      </div>
+    </div>
+    <footer class="runfoot"><span>Pre-implementation test</span><b>02</b></footer>
+  </section>
+
+  <section class="page">
+    <header class="run">
+      <span>AI Automation Testing Checklist</span>
+      <span>Gates 1–2</span>
+    </header>
+    <div class="content">
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">01</div>
+          <div>
+            <h2>Define What You're Automating</h2>
+            <p class="dek">Agree the business result, the boundaries, and the owner before any score is taken.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">1.1</span></div>
+            <h3>Write the outcome in operating language</h3>
+            <label class="done"><input type="checkbox" name="c11"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>The result is a finished business output. It does not describe a tool, a model, or a prompt.</p>
+            <p><span class="lbl">How to verify</span>Read it aloud to the process owner. Ask them to restate it, and keep the version you both accept.</p>
+            <p><span class="lbl">Success</span>One sentence names the trigger, the finished output, and the person accountable for it.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f11" aria-label="Findings for 1.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">1.2</span></div>
+            <h3>Map inputs, outputs, and exclusions</h3>
+            <label class="done"><input type="checkbox" name="c12"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Every source, every destination, and every case the automation must not handle is written down.</p>
+            <p><span class="lbl">How to verify</span>Trace one real record from arrival to handoff. Add any field or excluded case the map missed.</p>
+            <p><span class="lbl">Success</span>A second person can see where the data comes from, where it goes, and what is out of scope.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f12" aria-label="Findings for 1.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t1" aria-label="Tester for gate 1"></label>
+          <label class="who">Date <input type="text" name="d1" aria-label="Date for gate 1"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g1p"> Pass</label>
+            <label><input type="checkbox" name="g1i"> Partial</label>
+            <label><input type="checkbox" name="g1f"> Fail</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">02</div>
+          <div>
+            <h2>Test Performance and Accuracy</h2>
+            <p class="dek">Score quality and reliability against the threshold and time limit set on the record page.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">2.1</span></div>
+            <h3>Score accuracy on known cases <span class="crit">Critical</span></h3>
+            <label class="done"><input type="checkbox" name="c21"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Outputs match an agreed answer key on a set of cases that represents the real work.</p>
+            <p><span class="lbl">How to verify</span>Review at least 30 recent cases, or every case if volume is lower. Mark each correct, acceptable, or wrong.</p>
+            <p><span class="lbl">Success</span>The score meets the accuracy threshold. Every wrong case is grouped by cause.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f21" aria-label="Findings for 2.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">2.2</span></div>
+            <h3>Measure time and stability</h3>
+            <label class="done"><input type="checkbox" name="c22"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Work finishes inside the time the operation can tolerate, without stalls or repeating failures.</p>
+            <p><span class="lbl">How to verify</span>Run the sample in a normal working period. Log duration, errors, retries, and timeouts.</p>
+            <p><span class="lbl">Success</span>Typical and slowest acceptable runs meet the time limit, and the error rate stays inside the bound you record.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f22" aria-label="Findings for 2.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t2" aria-label="Tester for gate 2"></label>
+          <label class="who">Date <input type="text" name="d2" aria-label="Date for gate 2"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g2p"> Pass</label>
+            <label><input type="checkbox" name="g2i"> Partial</label>
+            <label><input type="checkbox" name="g2f"> Fail</label>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="runfoot"><span>Pre-implementation test</span><b>03</b></footer>
+  </section>
+
+  <section class="page">
+    <header class="run">
+      <span>AI Automation Testing Checklist</span>
+      <span>Gates 3–4</span>
+    </header>
+    <div class="content">
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">03</div>
+          <div>
+            <h2>Test Real-World Scenarios</h2>
+            <p class="dek">Use the awkward work already in the operation, not a cleaned demonstration set.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">3.1</span></div>
+            <h3>Run messy and exceptional cases <span class="crit">Critical</span></h3>
+            <label class="done"><input type="checkbox" name="c31"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Incomplete data, unusual wording, duplicates, and known edge cases behave safely.</p>
+            <p><span class="lbl">How to verify</span>Take exceptions from the last 90 days. Run each one and record what the automation did.</p>
+            <p><span class="lbl">Success</span>Each case is right, or it stops for a person. None invents a result or fails in silence.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f31" aria-label="Findings for 3.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">3.2</span></div>
+            <h3>Test the handoff with the receiving team</h3>
+            <label class="done"><input type="checkbox" name="c32"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>The people who receive the output can act on it without rebuilding the work.</p>
+            <p><span class="lbl">How to verify</span>Ask that owner to process five live outputs as they would on an ordinary day.</p>
+            <p><span class="lbl">Success</span>Those outputs are usable as delivered, and any context they need is already in the handoff.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f32" aria-label="Findings for 3.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t3" aria-label="Tester for gate 3"></label>
+          <label class="who">Date <input type="text" name="d3" aria-label="Date for gate 3"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g3p"> Pass</label>
+            <label><input type="checkbox" name="g3i"> Partial</label>
+            <label><input type="checkbox" name="g3f"> Fail</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">04</div>
+          <div>
+            <h2>Measure Actual Business Impact</h2>
+            <p class="dek">Compare the automation with the current method, then look for effort that moved elsewhere.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">4.1</span></div>
+            <h3>Compare results with the current method</h3>
+            <label class="done"><input type="checkbox" name="c41"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Time, errors, or cost are compared with a baseline captured before this test began.</p>
+            <p><span class="lbl">How to verify</span>Use the same kinds of cases in both periods. Record volume, time, and errors for each.</p>
+            <p><span class="lbl">Success</span>The change meets the business case, or the gap is explained with a cause and a decision.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f41" aria-label="Findings for 4.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">4.2</span></div>
+            <h3>Count work created somewhere else</h3>
+            <label class="done"><input type="checkbox" name="c42"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Time saved in one step is not consumed by new review, correction, or follow-up.</p>
+            <p><span class="lbl">How to verify</span>Ask the people before and after this step where effort moved. Count rework during the test.</p>
+            <p><span class="lbl">Success</span>Net effort is lower, or the new effort is smaller than the saving and has a named owner.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f42" aria-label="Findings for 4.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t4" aria-label="Tester for gate 4"></label>
+          <label class="who">Date <input type="text" name="d4" aria-label="Date for gate 4"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g4p"> Pass</label>
+            <label><input type="checkbox" name="g4i"> Partial</label>
+            <label><input type="checkbox" name="g4f"> Fail</label>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="runfoot"><span>Pre-implementation test</span><b>04</b></footer>
+  </section>
+
+  <section class="page">
+    <header class="run">
+      <span>AI Automation Testing Checklist</span>
+      <span>Gates 5–6</span>
+    </header>
+    <div class="content">
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">05</div>
+          <div>
+            <h2>Establish Human Intervention</h2>
+            <p class="dek">A named person must be able to stop, correct, or approve the work in the system itself.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">5.1</span></div>
+            <h3>Name who may stop, edit, or approve <span class="crit">Critical</span></h3>
+            <label class="done"><input type="checkbox" name="c51"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Routine review, exceptions, and high-impact actions each have a named decision maker.</p>
+            <p><span class="lbl">How to verify</span>Walk three real exception types with those people. Confirm they can intervene in the live system.</p>
+            <p><span class="lbl">Success</span>Each type has a person, a channel, and a response time. Nothing sits only with “the team.”</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f51" aria-label="Findings for 5.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">5.2</span></div>
+            <h3>Test the review on live output</h3>
+            <label class="done"><input type="checkbox" name="c52"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>A reviewer can accept, correct, or reject a case without reconstructing it from scratch.</p>
+            <p><span class="lbl">How to verify</span>Time one trained reviewer on ten items. Note missing context and any decision the screen will not support.</p>
+            <p><span class="lbl">Success</span>The reviewer finishes inside the agreed time, with the source of the case visible.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f52" aria-label="Findings for 5.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t5" aria-label="Tester for gate 5"></label>
+          <label class="who">Date <input type="text" name="d5" aria-label="Date for gate 5"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g5p"> Pass</label>
+            <label><input type="checkbox" name="g5i"> Partial</label>
+            <label><input type="checkbox" name="g5f"> Fail</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">06</div>
+          <div>
+            <h2>Prepare a Fallback System</h2>
+            <p class="dek">If the automation stops, the operation needs a method that staff have already used.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">6.1</span></div>
+            <h3>Run the manual path <span class="crit">Critical</span></h3>
+            <label class="done"><input type="checkbox" name="c61"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Staff can process the work from written instructions when the automation is unavailable.</p>
+            <p><span class="lbl">How to verify</span>Turn it off in a test window. Process a small live batch with the fallback instructions only.</p>
+            <p><span class="lbl">Success</span>The team completes that batch without the builder present.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f61" aria-label="Findings for 6.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">6.2</span></div>
+            <h3>Drill the switch and the return</h3>
+            <label class="done"><input type="checkbox" name="c62"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>People know when fallback starts, who announces it, and how work returns to the automation.</p>
+            <p><span class="lbl">How to verify</span>Send the notice, switch methods, then switch back. Track every item already in progress.</p>
+            <p><span class="lbl">Success</span>The right people receive the notice, no item is lost, and the return is an explicit step.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f62" aria-label="Findings for 6.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t6" aria-label="Tester for gate 6"></label>
+          <label class="who">Date <input type="text" name="d6" aria-label="Date for gate 6"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g6p"> Pass</label>
+            <label><input type="checkbox" name="g6i"> Partial</label>
+            <label><input type="checkbox" name="g6f"> Fail</label>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="runfoot"><span>Pre-implementation test</span><b>05</b></footer>
+  </section>
+
+  <section class="page">
+    <header class="run">
+      <span>AI Automation Testing Checklist</span>
+      <span>Gate 7 and results</span>
+    </header>
+    <div class="content">
+      <section class="gate">
+        <div class="sec-head">
+          <div class="sec-num">07</div>
+          <div>
+            <h2>Monitor Before Full Implementation</h2>
+            <p class="dek">Let a bounded slice of live work run long enough to show an ordinary week.</p>
+          </div>
+        </div>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">7.1</span></div>
+            <h3>Run a bounded pilot</h3>
+            <label class="done"><input type="checkbox" name="c71"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Live work is limited by team, volume, or case type, and results are reviewed on a set schedule.</p>
+            <p><span class="lbl">How to verify</span>Write the boundary and the review dates before the first live item. Log every failure in that window.</p>
+            <p><span class="lbl">Success</span>The pilot meets the agreed volume and duration, and every failure has a record.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f71" aria-label="Findings for 7.1"></label>
+        </article>
+
+        <article class="item">
+          <div class="item-top">
+            <div class="item-id"><span class="n">7.2</span></div>
+            <h3>Set the measures for after go-live</h3>
+            <label class="done"><input type="checkbox" name="c72"> Done</label>
+          </div>
+          <div class="cols">
+            <p><span class="lbl">What to check</span>Each ongoing measure has a source, an owner, a cadence, and a threshold that forces action.</p>
+            <p><span class="lbl">How to verify</span>Have the owner show where they will look, how often, and what they will do if the line is crossed.</p>
+            <p><span class="lbl">Success</span>Those measures are written down, and the owner has accepted them, before any wider release.</p>
+          </div>
+          <label class="findings"><span>Findings</span><input type="text" name="f72" aria-label="Findings for 7.2"></label>
+        </article>
+
+        <div class="sec-foot">
+          <label class="who">Tester <input type="text" name="t7" aria-label="Tester for gate 7"></label>
+          <label class="who">Date <input type="text" name="d7" aria-label="Date for gate 7"></label>
+          <div class="choices">
+            <span>Gate result</span>
+            <label><input type="checkbox" name="g7p"> Pass</label>
+            <label><input type="checkbox" name="g7i"> Partial</label>
+            <label><input type="checkbox" name="g7f"> Fail</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="results">
+        <div class="split-title">
+          <h2>Testing results</h2>
+          <p class="hint">Enter the count of checks in each gate. Two checks per gate.</p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Gate</th>
+              <th class="narrow">Pass</th>
+              <th class="narrow">Partial</th>
+              <th class="narrow">Fail</th>
+              <th>Evidence location</th>
+              <th class="status">Gate result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 · Define</td>
+              <td class="ctr"><input type="text" name="r1p" aria-label="Gate 1 pass count"></td>
+              <td class="ctr"><input type="text" name="r1i" aria-label="Gate 1 partial count"></td>
+              <td class="ctr"><input type="text" name="r1f" aria-label="Gate 1 fail count"></td>
+              <td><input type="text" name="r1e" aria-label="Gate 1 evidence"></td>
+              <td><input type="text" name="r1s" aria-label="Gate 1 result"></td>
+            </tr>
+            <tr>
+              <td>2 · Accuracy</td>
+              <td class="ctr"><input type="text" name="r2p" aria-label="Gate 2 pass count"></td>
+              <td class="ctr"><input type="text" name="r2i" aria-label="Gate 2 partial count"></td>
+              <td class="ctr"><input type="text" name="r2f" aria-label="Gate 2 fail count"></td>
+              <td><input type="text" name="r2e" aria-label="Gate 2 evidence"></td>
+              <td><input type="text" name="r2s" aria-label="Gate 2 result"></td>
+            </tr>
+            <tr>
+              <td>3 · Real-world</td>
+              <td class="ctr"><input type="text" name="r3p" aria-label="Gate 3 pass count"></td>
+              <td class="ctr"><input type="text" name="r3i" aria-label="Gate 3 partial count"></td>
+              <td class="ctr"><input type="text" name="r3f" aria-label="Gate 3 fail count"></td>
+              <td><input type="text" name="r3e" aria-label="Gate 3 evidence"></td>
+              <td><input type="text" name="r3s" aria-label="Gate 3 result"></td>
+            </tr>
+            <tr>
+              <td>4 · Impact</td>
+              <td class="ctr"><input type="text" name="r4p" aria-label="Gate 4 pass count"></td>
+              <td class="ctr"><input type="text" name="r4i" aria-label="Gate 4 partial count"></td>
+              <td class="ctr"><input type="text" name="r4f" aria-label="Gate 4 fail count"></td>
+              <td><input type="text" name="r4e" aria-label="Gate 4 evidence"></td>
+              <td><input type="text" name="r4s" aria-label="Gate 4 result"></td>
+            </tr>
+            <tr>
+              <td>5 · Intervention</td>
+              <td class="ctr"><input type="text" name="r5p" aria-label="Gate 5 pass count"></td>
+              <td class="ctr"><input type="text" name="r5i" aria-label="Gate 5 partial count"></td>
+              <td class="ctr"><input type="text" name="r5f" aria-label="Gate 5 fail count"></td>
+              <td><input type="text" name="r5e" aria-label="Gate 5 evidence"></td>
+              <td><input type="text" name="r5s" aria-label="Gate 5 result"></td>
+            </tr>
+            <tr>
+              <td>6 · Fallback</td>
+              <td class="ctr"><input type="text" name="r6p" aria-label="Gate 6 pass count"></td>
+              <td class="ctr"><input type="text" name="r6i" aria-label="Gate 6 partial count"></td>
+              <td class="ctr"><input type="text" name="r6f" aria-label="Gate 6 fail count"></td>
+              <td><input type="text" name="r6e" aria-label="Gate 6 evidence"></td>
+              <td><input type="text" name="r6s" aria-label="Gate 6 result"></td>
+            </tr>
+            <tr>
+              <td>7 · Monitor</td>
+              <td class="ctr"><input type="text" name="r7p" aria-label="Gate 7 pass count"></td>
+              <td class="ctr"><input type="text" name="r7i" aria-label="Gate 7 partial count"></td>
+              <td class="ctr"><input type="text" name="r7f" aria-label="Gate 7 fail count"></td>
+              <td><input type="text" name="r7e" aria-label="Gate 7 evidence"></td>
+              <td><input type="text" name="r7s" aria-label="Gate 7 result"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="results">
+        <div class="split-title">
+          <h2>Open items</h2>
+          <p class="hint">Every partial or fail needs an owner and a review date.</p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:22mm">Check</th>
+              <th>Gap</th>
+              <th style="width:38mm">Owner</th>
+              <th style="width:28mm">Review date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="text" name="o1c" aria-label="Open item 1 check"></td>
+              <td><input type="text" name="o1g" aria-label="Open item 1 gap"></td>
+              <td><input type="text" name="o1o" aria-label="Open item 1 owner"></td>
+              <td><input type="text" name="o1d" aria-label="Open item 1 date"></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="o2c" aria-label="Open item 2 check"></td>
+              <td><input type="text" name="o2g" aria-label="Open item 2 gap"></td>
+              <td><input type="text" name="o2o" aria-label="Open item 2 owner"></td>
+              <td><input type="text" name="o2d" aria-label="Open item 2 date"></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="o3c" aria-label="Open item 3 check"></td>
+              <td><input type="text" name="o3g" aria-label="Open item 3 gap"></td>
+              <td><input type="text" name="o3o" aria-label="Open item 3 owner"></td>
+              <td><input type="text" name="o3d" aria-label="Open item 3 date"></td>
+            </tr>
+            <tr>
+              <td><input type="text" name="o4c" aria-label="Open item 4 check"></td>
+              <td><input type="text" name="o4g" aria-label="Open item 4 gap"></td>
+              <td><input type="text" name="o4o" aria-label="Open item 4 owner"></td>
+              <td><input type="text" name="o4d" aria-label="Open item 4 date"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+    <footer class="runfoot"><span>Pre-implementation test</span><b>06</b></footer>
+  </section>
+
+  <section class="page">
+    <header class="run">
+      <span>AI Automation Testing Checklist</span>
+      <span>Decision</span>
+    </header>
+    <div class="content">
+      <h2 class="page-title">Deployment readiness</h2>
+      <p class="lede">Judge each gate from the evidence already recorded. Then select one outcome. A failed critical check rules out Ready.</p>
+
+      <div class="assess">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:34mm">Gate</th>
+              <th style="width:18mm">Critical</th>
+              <th>Required to pass the gate</th>
+              <th style="width:16mm">Met</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 · Define</td>
+              <td>No</td>
+              <td>Outcome, boundaries, and owner are agreed.</td>
+              <td class="ctr"><input type="checkbox" name="m1" aria-label="Gate 1 met"></td>
+            </tr>
+            <tr>
+              <td>2 · Accuracy</td>
+              <td>Yes</td>
+              <td>Known-case accuracy meets the threshold, and runtime is stable.</td>
+              <td class="ctr"><input type="checkbox" name="m2" aria-label="Gate 2 met"></td>
+            </tr>
+            <tr>
+              <td>3 · Real-world</td>
+              <td>Yes</td>
+              <td>Messy cases are safe, and the handoff is usable.</td>
+              <td class="ctr"><input type="checkbox" name="m3" aria-label="Gate 3 met"></td>
+            </tr>
+            <tr>
+              <td>4 · Impact</td>
+              <td>No</td>
+              <td>The baseline comparison is recorded, including work that moved.</td>
+              <td class="ctr"><input type="checkbox" name="m4" aria-label="Gate 4 met"></td>
+            </tr>
+            <tr>
+              <td>5 · Intervention</td>
+              <td>Yes</td>
+              <td>Named people can stop, edit, or approve in the system.</td>
+              <td class="ctr"><input type="checkbox" name="m5" aria-label="Gate 5 met"></td>
+            </tr>
+            <tr>
+              <td>6 · Fallback</td>
+              <td>Yes</td>
+              <td>The manual path and the return have both been run.</td>
+              <td class="ctr"><input type="checkbox" name="m6" aria-label="Gate 6 met"></td>
+            </tr>
+            <tr>
+              <td>7 · Monitor</td>
+              <td>No</td>
+              <td>The pilot is complete, and go-live measures have an owner.</td>
+              <td class="ctr"><input type="checkbox" name="m7" aria-label="Gate 7 met"></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="ruleline">Ready requires every gate met and no failed critical check. Needs Improvement keeps use inside the pilot until each open item is closed. Not Ready means the automation stays out of work the business depends on.</p>
+      </div>
+
+      <p class="block-label">Decision — select one</p>
+      <div class="outcomes">
+        <article class="outcome ready">
+          <label class="pick"><input type="checkbox" name="decision_ready"><span>Ready</span></label>
+          <p class="when">Select only when every line is true.</p>
+          <ul>
+            <li>All seven gates are met.</li>
+            <li>Checks 2.1, 3.1, 5.1, and 6.1 pass.</li>
+            <li>The fallback was executed, not only written.</li>
+            <li>Pilot evidence is attached.</li>
+            <li>The process owner accepts wider use.</li>
+          </ul>
+        </article>
+        <article class="outcome improve">
+          <label class="pick"><input type="checkbox" name="decision_improve"><span>Needs Improvement</span></label>
+          <p class="when">Select only when every line is true.</p>
+          <ul>
+            <li>No critical check has failed.</li>
+            <li>Each partial has an owner and a date.</li>
+            <li>Live use stays inside the pilot boundary.</li>
+            <li>A review date is set before any wider release.</li>
+          </ul>
+        </article>
+        <article class="outcome stop">
+          <label class="pick"><input type="checkbox" name="decision_stop"><span>Not Ready</span></label>
+          <p class="when">Select if any line is true.</p>
+          <ul>
+            <li>Accuracy is below the agreed threshold.</li>
+            <li>Messy cases fail without a safe stop.</li>
+            <li>No named person can intervene.</li>
+            <li>The fallback has not been run.</li>
+            <li>The business impact is still unknown.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="follow">
+        <div class="row">
+          <label>
+            <span class="lbl">Conditions before any wider release</span>
+            <input type="text" name="conditions" aria-label="Conditions before wider release">
+          </label>
+          <label>
+            <span class="lbl">Owner</span>
+            <input type="text" name="condition_owner" aria-label="Condition owner">
+          </label>
+          <label>
+            <span class="lbl">Review date</span>
+            <input type="text" name="review_date" aria-label="Next review date">
+          </label>
+        </div>
+      </div>
+
+      <div class="signoff">
+        <p class="block-label" style="margin-top:0">Authorization</p>
+        <table class="sign">
+          <thead>
+            <tr>
+              <th style="width:38mm">Role</th>
+              <th>Name</th>
+              <th>Signature</th>
+              <th style="width:32mm">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Process owner</td>
+              <td><input type="text" name="sig_owner" aria-label="Process owner name"></td>
+              <td><input type="text" name="sig_owner_sign" aria-label="Process owner signature"></td>
+              <td><input type="text" name="sig_owner_date" aria-label="Process owner date"></td>
+            </tr>
+            <tr>
+              <td>Operations lead</td>
+              <td><input type="text" name="sig_ops" aria-label="Operations lead name"></td>
+              <td><input type="text" name="sig_ops_sign" aria-label="Operations lead signature"></td>
+              <td><input type="text" name="sig_ops_date" aria-label="Operations lead date"></td>
+            </tr>
+            <tr>
+              <td>Reviewer</td>
+              <td><input type="text" name="sig_rev" aria-label="Reviewer name"></td>
+              <td><input type="text" name="sig_rev_sign" aria-label="Reviewer signature"></td>
+              <td><input type="text" name="sig_rev_date" aria-label="Reviewer date"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <footer class="runfoot"><span>Pre-implementation test</span><b>07</b></footer>
+  </section>
+</body>
+</html>
